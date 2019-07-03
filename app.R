@@ -4,7 +4,7 @@
 #
 # App organization:
 # UI - 3 inputs: 
-#    selectInput - Degree Category, 
+#    selectInput - Degree Category (master1$cip-name, cip_code) 
 #    selectInput - Occupation Category, 
 #    selectInput - School Category
 # 
@@ -12,20 +12,32 @@
 # Each input should filter the data table output
 # Graph output should include average cost & salary for next 20 years?
 
+# Working Directory
+# setwd("~/Dropbox/R-Studio/OccupationFromDegree")
+
 library(shiny)
 library(dplyr)
 library(readxl)
 library(DT)
 library(readr)
 library(tidyr)
+library(janitor) # clean_names()
+
+
+chief_exe_cip_levels <- master1 %>% 
+  filter(`occ-name`=="Chief Executives") %>% 
+  select(`cip-name`) %>%
+  group_by(`cip-name`) %>%
+  summarize(total = n(),percent_total = total/sum(total)) %>%
+  arrange(desc(total))
 
 
 # import master1
-# master1 <- read.csv("https://www.dropbox.com/s/fgty42qwpkzudwz/master1.txt?dl=1")
+master1 <- read.csv("https://www.dropbox.com/s/fgty42qwpkzudwz/master1.txt?dl=1")
 # master1 <- read_csv("~/Dropbox/R-Studio/R_Training/Master1.zip")
 # save(master1,file="data/master1.Rda")
 # master2 <- load(file ="data/master1.Rda") # loading is not working yet.
-
+# names(master1) <- clean_names(master1,"snake")
 
 # import cip_code
 # cip_code <- read.delim("~/Dropbox/R-Studio/OccupationFromDegree/jrversion/data/cip_code.txt")
